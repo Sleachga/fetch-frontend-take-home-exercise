@@ -5,8 +5,6 @@ import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext({
   user: null,
-  login: (user: any) => {},
-  logout: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
