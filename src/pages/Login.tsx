@@ -10,11 +10,11 @@ const PugImage = styled.img`
 const Login = () => {
   return (
     <>
-      <Flex width="100vw" height="100vh" pt="15vh">
-        <LoginCard />
-      </Flex>
       <Flex position="absolute" bottom="0" right="0">
         <PugImage src={pugImage} alt="Cute pug" />
+      </Flex>
+      <Flex width="100vw" height="100vh" pt="15vh">
+        <LoginCard />
       </Flex>
     </>
   );

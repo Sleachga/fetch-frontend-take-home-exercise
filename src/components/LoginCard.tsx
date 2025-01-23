@@ -20,13 +20,16 @@ export const LoginCard = () => {
             <Heading className="font" size={"3"}>
               Email address
             </Heading>
-            <TextField.Root placeholder="email@example.com" type="email" />
+            <TextField.Root placeholder="FosterFail@example.com" type="email" />
           </Flex>
           <Flex direction="column">
             <Heading className="font" size={"3"}>
               Password
             </Heading>
-            <TextField.Root placeholder="YourDogsName1234" type="password" />
+            <TextField.Root
+              placeholder="YourFutureDogsName1234"
+              type="password"
+            />
           </Flex>
         </Flex>
       </StyledCard>
