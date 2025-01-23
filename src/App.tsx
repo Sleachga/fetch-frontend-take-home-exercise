@@ -1,16 +1,29 @@
-import { useState } from "react";
-
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
+import Login from "./pages/Login";
+import Homepage from "./pages/Homepage";
+
+import { gray, blue, red, green } from "@radix-ui/colors";
+import { ThemeProvider } from "styled-components";
+
+// Create your theme
+const theme = {
+  colors: {
+    ...gray,
+    ...blue,
+    ...red,
+    ...green,
+  },
+};
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <div>
-        <h1>Hello World</h1>
-      </div>
-    </>
+    <ThemeProvider theme={theme}>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/homepage" element={<Homepage />} />
+      </Routes>
+    </ThemeProvider>
   );
 }
 

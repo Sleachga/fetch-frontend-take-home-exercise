@@ -1,4 +1,39 @@
 @import "@radix-ui/themes/styles.css";
+@import url("https://fonts.googleapis.com/css2?family=Atma:wght@300;400;500;600;700&display=swap");
+
+.font {
+  color: #232f61;
+}
+
+.atma-light {
+  font-family: "Atma", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.atma-regular {
+  font-family: "Atma", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.atma-medium {
+  font-family: "Atma", serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.atma-semibold {
+  font-family: "Atma", serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.atma-bold {
+  font-family: "Atma", serif;
+  font-weight: 700;
+  font-style: normal;
+}
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -17,15 +52,6 @@
   width: 100%;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
   margin: 0;
   display: flex;
@@ -33,4 +59,85 @@ body {
   min-width: 320px;
   min-height: 100vh;
   width: 100%;
+}
+
+:root,
+.light,
+.light-theme,
+.radix-themes {
+  --color-background: #f7f3ea;
+}
+
+:root,
+.light,
+.light-theme {
+  --blue-1: #f0f0f2;
+  --blue-2: #e9ebf1;
+  --blue-3: #dfe3f0;
+  --blue-4: #d1daf2;
+  --blue-5: #c2cef2;
+  --blue-6: #afc0f1;
+  --blue-7: #99ace7;
+  --blue-8: #7b92de;
+  --blue-9: #232f61;
+  --blue-10: #344276;
+  --blue-11: #3f5196;
+  --blue-12: #202c5e;
+
+  --blue-a1: #e5ecff62;
+  --blue-a2: #cddbff55;
+  --blue-a3: #a4bcff49;
+  --blue-a4: #95b2ff62;
+  --blue-a5: #6e93ff62;
+  --blue-a6: #1f5aff55;
+  --blue-a7: #033ae362;
+  --blue-a8: #0234d281;
+  --blue-a9: #000f4bdb;
+  --blue-a10: #011357ca;
+  --blue-a11: #001a79be;
+  --blue-a12: #000f4ade;
+
+  --blue-contrast: #fff;
+  --blue-surface: #e6e9f3cc;
+  --blue-indicator: #232f61;
+  --blue-track: #232f61;
+}
+
+@supports (color: color(display-p3 1 1 1)) {
+  @media (color-gamut: p3) {
+    :root,
+    .light,
+    .light-theme {
+      --blue-1: oklch(95.6% 0.0017 270.6);
+      --blue-2: oklch(94.1% 0.0084 270.6);
+      --blue-3: oklch(91.7% 0.0174 270.6);
+      --blue-4: oklch(88.8% 0.0344 270.6);
+      --blue-5: oklch(85.4% 0.0519 270.6);
+      --blue-6: oklch(81.1% 0.0717 270.6);
+      --blue-7: oklch(75.2% 0.0881 270.6);
+      --blue-8: oklch(67.3% 0.1156 270.6);
+      --blue-9: oklch(32.4% 0.0895 270.6);
+      --blue-10: oklch(39.5% 0.0895 270.6);
+      --blue-11: oklch(45.5% 0.1156 270.6);
+      --blue-12: oklch(31.3% 0.0895 270.6);
+
+      --blue-a1: color(display-p3 0.898 0.9216 1 / 0.35);
+      --blue-a2: color(display-p3 0.7608 0.8275 1 / 0.25);
+      --blue-a3: color(display-p3 0.5333 0.6392 1 / 0.2);
+      --blue-a4: color(display-p3 0.4157 0.5608 1 / 0.25);
+      --blue-a5: color(display-p3 0 0.2275 1 / 0.2);
+      --blue-a6: color(display-p3 0 0 0.9961 / 0.1);
+      --blue-a7: color(display-p3 0.0039 0.1765 0.8275 / 0.362);
+      --blue-a8: color(display-p3 0.0039 0.1608 0.7686 / 0.484);
+      --blue-a9: color(display-p3 0 0.051 0.2706 / 0.85);
+      --blue-a10: color(display-p3 0 0.0627 0.3137 / 0.777);
+      --blue-a11: color(display-p3 0 0.0745 0.4353 / 0.728);
+      --blue-a12: color(display-p3 0 0.0471 0.2667 / 0.862);
+
+      --blue-contrast: #fff;
+      --blue-surface: color(display-p3 0.9059 0.9137 0.9529 / 0.8);
+      --blue-indicator: oklch(32.4% 0.0895 270.6);
+      --blue-track: oklch(32.4% 0.0895 270.6);
+    }
+  }
 }
