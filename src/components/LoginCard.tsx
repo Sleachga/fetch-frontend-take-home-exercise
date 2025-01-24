@@ -1,4 +1,12 @@
-import { Box, Button, Card, Flex, Heading, TextField } from "@radix-ui/themes";
+import {
+  Box,
+  Button,
+  Card,
+  Flex,
+  Heading,
+  Text,
+  TextField,
+} from "@radix-ui/themes";
 import { useState } from "react";
 import styled from "styled-components";
 import { useAuth } from "../hooks/useAuth";
@@ -13,10 +21,23 @@ export const LoginCard = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
+  const [isError, setIsError] = useState(false);
+
   const { login } = useAuth();
 
   const handleLogin = async () => {
+    setIsError(false);
+
     try {
+      if (!name || !email) {
+        setIsError(true);
+        return;
+      } else if (!email.includes("@")) {
+        // in a real app, I would use a more sophisticated email validation
+        setIsError(true);
+        return;
+      }
+
       const response = await fetch(
         "https://frontend-take-home-service.fetch.com/auth/login",
         {
@@ -30,6 +51,7 @@ export const LoginCard = () => {
 
       // It didn't work :(
       if (!response.ok) {
+        setIsError(true);
         throw new Error("Login failed");
       }
 
@@ -38,6 +60,7 @@ export const LoginCard = () => {
 
       console.log("Login Success!", name, email);
     } catch (error) {
+      setIsError(true);
       console.error("Login error:", error);
     }
   };
@@ -75,6 +98,7 @@ export const LoginCard = () => {
           <Button size="3" variant="solid" color="iris" onClick={handleLogin}>
             Login
           </Button>
+          {isError && <Text color="red">Invalid email or name</Text>}
         </Flex>
       </StyledCard>
     </Box>
