@@ -28,41 +28,18 @@ export const LoginCard = () => {
   const handleLogin = async () => {
     setIsError(false);
 
-    try {
-      if (!name || !email) {
-        setIsError(true);
-        return;
-      } else if (!email.includes("@")) {
-        // in a real app, I would use a more sophisticated email validation
-        setIsError(true);
-        return;
-      }
-
-      const response = await fetch(
-        "https://frontend-take-home-service.fetch.com/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({ name, email }),
-        }
-      );
-
-      // It didn't work :(
-      if (!response.ok) {
-        setIsError(true);
-        throw new Error("Login failed");
-      }
-
-      // It worked :)
-      login({ name, email });
-
-      console.log("Login Success!", name, email);
-    } catch (error) {
+    if (!name || !email) {
       setIsError(true);
-      console.error("Login error:", error);
+      return;
+    } else if (!email.includes("@")) {
+      // I would do better email validation on a real app :)
+      setIsError(true);
+      return;
+    }
+
+    const result = await login(name, email);
+    if (!result.success) {
+      setIsError(true);
     }
   };
 

@@ -4,7 +4,7 @@ import Logo from "../assets/Logo";
 import { useAuth } from "../hooks/useAuth";
 
 const NavContainer = styled.nav`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -14,6 +14,7 @@ const NavContainer = styled.nav`
   padding: 4px 2rem;
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 100;
 `;
 
 const LogoText = styled.div`

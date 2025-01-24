@@ -23,6 +23,7 @@ interface StyledPawProps {
   right?: string;
   rotation?: string;
   color: string;
+  isMobile?: boolean;
 }
 
 const StyledPawIcon = styled(PawIcon)<StyledPawProps & { isMobile?: boolean }>`
