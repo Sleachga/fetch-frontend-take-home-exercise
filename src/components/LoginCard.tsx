@@ -1,4 +1,4 @@
-import { Box, Card, Flex, Heading, TextField } from "@radix-ui/themes";
+import { Box, Button, Card, Flex, Heading, TextField } from "@radix-ui/themes";
 import styled from "styled-components";
 
 const StyledCard = styled(Card)`
@@ -31,6 +31,9 @@ export const LoginCard = () => {
               type="password"
             />
           </Flex>
+          <Button size="3" variant="solid" color="iris">
+            Login
+          </Button>
         </Flex>
       </StyledCard>
     </Box>
