@@ -1,6 +1,7 @@
 import { Button, Flex } from "@radix-ui/themes";
 import { styled } from "styled-components";
 import Logo from "../assets/Logo";
+import { useAuth } from "../hooks/useAuth";
 
 const NavContainer = styled.nav`
   position: absolute;
@@ -30,7 +31,8 @@ const SignOutButton = styled(Button)`
 
 const NavigationBar = () => {
   // You can add authentication state management here
-  const isAuthenticated = true; // Replace with actual auth state
+  const { user, logout } = useAuth();
+  const isAuthenticated = !!user; // Replace with actual auth state
 
   return (
     <NavContainer>
@@ -39,7 +41,7 @@ const NavigationBar = () => {
         <Logo height="32px" />
       </Flex>
       {isAuthenticated && (
-        <SignOutButton variant="ghost" color="gray">
+        <SignOutButton variant="ghost" color="gray" onClick={logout}>
           Sign Out
         </SignOutButton>
       )}

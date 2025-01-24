@@ -25,9 +25,7 @@ interface StyledPawProps {
   color: string;
 }
 
-const StyledPawIcon = styled(PawIcon)<
-  StyledPawProps & { hideOnMobile?: boolean }
->`
+const StyledPawIcon = styled(PawIcon)<StyledPawProps & { isMobile?: boolean }>`
   position: absolute;
   top: ${(props) => props.top};
   bottom: ${(props) => props.bottom};
@@ -37,7 +35,7 @@ const StyledPawIcon = styled(PawIcon)<
   transform: ${(props) => `rotate(${props.rotation})`};
 
   ${(props) =>
-    props.hideOnMobile &&
+    props.isMobile &&
     `
     @media (max-width: 768px) {
       display: none;
@@ -71,7 +69,7 @@ const Login = () => {
         left="10vw"
         color="#fee6de"
         rotation="-30deg"
-        hideOnMobile
+        isMobile
       />
       <Flex position="absolute" bottom="0" right="0">
         <PugImage src={pugImage} alt="Cute pug" />
