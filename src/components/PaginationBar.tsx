@@ -1,18 +1,7 @@
 import { Button, Flex, Text } from "@radix-ui/themes";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { useEffect, useState } from "react";
-
-const slideUp = keyframes`
-  from {
-    transform: translate(-50%, 100%);
-    opacity: 0;
-  }
-  to {
-    transform: translate(-50%, 0);
-    opacity: 1;
-  }
-`;
 
 const PaginationContainer = styled(Flex)<{ show: boolean }>`
   position: fixed;
