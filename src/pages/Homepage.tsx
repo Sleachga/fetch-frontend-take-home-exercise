@@ -49,8 +49,8 @@ const Homepage = () => {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [sortBy, setSortBy] = useState<"breed" | "age" | "name">("breed");
 
-  const [prevCursor, setPrevCursor] = useState<string | null>(null);
-  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [prevCursor] = useState<string | null>(null);
+  const [nextCursor] = useState<string | null>(null);
 
   const [showControls, setShowControls] = useState(true);
 
