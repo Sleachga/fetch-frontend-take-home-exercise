@@ -85,8 +85,29 @@ export const useDogSearch = () => {
     }
   };
 
+  const fetchBreeds = async (): Promise<string[]> => {
+    try {
+      const response = await fetch(
+        "https://frontend-take-home-service.fetch.com/dogs/breeds",
+        {
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch breeds");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching breeds:", error);
+      throw error;
+    }
+  };
+
   return {
     searchDogs,
     fetchDogsByIds,
+    fetchBreeds,
   };
 };

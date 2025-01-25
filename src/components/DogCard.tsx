@@ -56,6 +56,11 @@ interface DogCardProps {
   isFavorite?: boolean;
 }
 
+const StyledHeading = styled(Heading)`
+  font-family: "Atma", cursive;
+  font-weight: 500;
+`;
+
 export const DogCard = ({
   dog,
   onClick,
@@ -84,7 +89,7 @@ export const DogCard = ({
       <DogImage src={dog.img} alt={`${dog.name} the ${dog.breed}`} />
       <Flex direction="column" gap="2" p="4">
         <Flex justify="between">
-          <Heading size="4">{dog.name}</Heading>
+          <StyledHeading size="4">{dog.name}</StyledHeading>
           <Text size="2">{dog.breed}</Text>
         </Flex>
         <Flex justify="between">
