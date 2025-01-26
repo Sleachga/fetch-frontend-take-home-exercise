@@ -16,6 +16,8 @@ import { SortBy } from "../components/SortBy";
 import { FilterByLocation } from "../components/FilterByLocation";
 import { Bounds } from "../types";
 
+import sadCorgi from "../assets/sad-corg.png";
+
 const MasonryContainer = styled.div`
   width: 100%;
   max-width: 1800px;
@@ -278,9 +280,16 @@ const Homepage = () => {
               direction="column"
               align="center"
               justify="center"
-              py="9"
               style={{ width: "100%" }}
             >
+              <img
+                src={sadCorgi}
+                alt="Sad corgi"
+                style={{
+                  width: "400px",
+                  marginBottom: "24px",
+                }}
+              />
               <Text size="5" weight="medium" color="gray">
                 Sorry... couldn't find any dogs matching your search
               </Text>
