@@ -104,11 +104,31 @@ const Homepage = () => {
         searchParams.zipCodes = locationZipCodes;
       }
 
-      const { resultIds, next, prev, total } = await searchDogs(searchParams);
-      setDogIds(resultIds || []); // Ensure we always set an array
+      // If we have a cursor, add the 'from' parameter
+      if (cursor) {
+        try {
+          const params = new URLSearchParams(
+            cursor.replace("/dogs/search?", "")
+          );
+          const fromParam = params.get("from");
+          if (fromParam) {
+            searchParams.from = fromParam;
+          }
+        } catch (e) {
+          console.error("Error parsing cursor:", e);
+        }
+      }
+
+      const {
+        resultIds,
+        next,
+        prev,
+        total: totalResults,
+      } = await searchDogs(searchParams);
+      setDogIds(resultIds || []);
       setNextCursor(next || null);
       setPrevCursor(prev || null);
-      setTotal(total || 0);
+      setTotal(totalResults || 0);
     } catch (error) {
       console.error("Error searching dogs:", error);
       setDogIds([]);
@@ -277,6 +297,7 @@ const Homepage = () => {
           onNext={() => handlePagination("next")}
           hasPrevious={!!prevCursor}
           hasNext={!!nextCursor}
+          total={total}
         />
       )}
     </>

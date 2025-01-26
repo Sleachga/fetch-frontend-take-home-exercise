@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 const PaginationContainer = styled(Flex)<{ show: boolean }>`
   position: fixed;
-  bottom: 50px;
+  bottom: 40px;
   left: 50%;
   transform: translate(-50%, ${(props) => (props.show ? "0" : "150px")});
   gap: 12px;
@@ -15,6 +15,8 @@ const PaginationContainer = styled(Flex)<{ show: boolean }>`
   opacity: ${(props) => (props.show ? 1 : 0)};
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
   pointer-events: ${(props) => (props.show ? "all" : "none")};
+  flex-direction: column;
+  background: var(--color-page-background);
 `;
 
 const ActionButton = styled(Button)`
@@ -28,6 +30,7 @@ interface PaginationBarProps {
   onNext: () => void;
   hasPrevious: boolean;
   hasNext: boolean;
+  total: number;
 }
 
 export const PaginationBar = ({
@@ -35,6 +38,7 @@ export const PaginationBar = ({
   onNext,
   hasPrevious,
   hasNext,
+  total,
 }: PaginationBarProps) => {
   const [show, setShow] = useState(false);
 
@@ -52,30 +56,35 @@ export const PaginationBar = ({
 
   return (
     <PaginationContainer show={show}>
-      <ActionButton
-        size="3"
-        variant="solid"
-        color="iris"
-        onClick={onPrevious}
-        disabled={!hasPrevious}
-      >
-        <Flex align="center" justify="center" gap="1">
-          <ChevronLeftIcon width="16" height="16" />
-          <Text>Previous</Text>
-        </Flex>
-      </ActionButton>
-      <ActionButton
-        size="3"
-        variant="solid"
-        color="iris"
-        onClick={onNext}
-        disabled={!hasNext}
-      >
-        <Flex align="center" justify="center" gap="1">
-          <Text>Next</Text>
-          <ChevronRightIcon width="16" height="16" />
-        </Flex>
-      </ActionButton>
+      <Flex gap="2">
+        <ActionButton
+          size="3"
+          variant="solid"
+          color="iris"
+          onClick={onPrevious}
+          disabled={!hasPrevious}
+        >
+          <Flex align="center" justify="center" gap="1">
+            <ChevronLeftIcon width="16" height="16" />
+            <Text>Previous</Text>
+          </Flex>
+        </ActionButton>
+        <ActionButton
+          size="3"
+          variant="solid"
+          color="iris"
+          onClick={onNext}
+          disabled={!hasNext}
+        >
+          <Flex align="center" justify="center" gap="1">
+            <Text>Next</Text>
+            <ChevronRightIcon width="16" height="16" />
+          </Flex>
+        </ActionButton>
+      </Flex>
+      <Text size="2" color="gray">
+        {total} dogs found 🐕
+      </Text>
     </PaginationContainer>
   );
 };
