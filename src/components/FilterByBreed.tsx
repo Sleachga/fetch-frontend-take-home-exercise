@@ -12,6 +12,14 @@ const StyledContent = styled(DropdownMenu.Content)`
   align-items: start;
   padding: 16px 16px 16px 16px;
   margin-top: 10px;
+
+  @media (max-width: 768px) {
+    position: fixed;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 32px);
+    max-width: 400px;
+  }
 `;
 
 const BreedColumn = styled.div`
@@ -91,7 +99,7 @@ export const FilterByBreed = ({
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>{children}</DropdownMenu.Trigger>
-      <StyledContent align="start">
+      <StyledContent align="center" side="bottom" sideOffset={5}>
         <Header>
           <Text size="2" weight="bold">
             Selected: {selectedBreeds.length}

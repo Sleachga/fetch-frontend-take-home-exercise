@@ -17,13 +17,23 @@ interface SearchResponse {
   prev?: string;
 }
 
+interface LocationSearchParams {
+  geoBoundingBox: {
+    top_right: { lat: number; lon: number };
+    bottom_left: { lat: number; lon: number };
+  };
+  size?: number;
+}
+
+const BASE_URL = "https://frontend-take-home-service.fetch.com";
+
 export const useDogSearch = () => {
   const searchDogs = async (
     params: DogSearchParams
   ): Promise<SearchResponse> => {
     try {
       // Convert params object to URLSearchParams
-      const searchParams = new URLSearchParams();
+      let searchParams = new URLSearchParams();
 
       // Handle arrays
       if (params.breeds?.length) {
@@ -43,7 +53,7 @@ export const useDogSearch = () => {
       if (params.sort) searchParams.append("sort", params.sort);
 
       const response = await fetch(
-        `https://frontend-take-home-service.fetch.com/dogs/search?${searchParams.toString()}`,
+        `${BASE_URL}/dogs/search?${searchParams.toString()}`,
         {
           credentials: "include",
         }
@@ -62,17 +72,14 @@ export const useDogSearch = () => {
 
   const fetchDogsByIds = async (dogIds: string[]): Promise<Dog[]> => {
     try {
-      const response = await fetch(
-        "https://frontend-take-home-service.fetch.com/dogs",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(dogIds),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/dogs`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(dogIds),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to fetch dogs");
@@ -87,12 +94,9 @@ export const useDogSearch = () => {
 
   const fetchBreeds = async (): Promise<string[]> => {
     try {
-      const response = await fetch(
-        "https://frontend-take-home-service.fetch.com/dogs/breeds",
-        {
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${BASE_URL}/dogs/breeds`, {
+        credentials: "include",
+      });
 
       if (!response.ok) {
         throw new Error("Failed to fetch breeds");
@@ -105,9 +109,41 @@ export const useDogSearch = () => {
     }
   };
 
+  const searchLocations = async (params: LocationSearchParams) => {
+    try {
+      const response = await fetch(`${BASE_URL}/locations/search`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(params),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to search locations");
+      }
+
+      const data = await response.json();
+
+      if (!data.results || !Array.isArray(data.results)) {
+        console.error("Unexpected response format:", data);
+        throw new Error("Invalid response format from locations search");
+      }
+
+      return data.results.map(
+        (location: { zip_code: string }) => location.zip_code
+      );
+    } catch (error) {
+      console.error("Error searching locations:", error);
+      throw error;
+    }
+  };
+
   return {
     searchDogs,
     fetchDogsByIds,
     fetchBreeds,
+    searchLocations,
   };
 };

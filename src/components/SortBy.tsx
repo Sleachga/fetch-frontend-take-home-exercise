@@ -11,6 +11,14 @@ const StyledContent = styled(DropdownMenu.Content)`
   align-items: start;
   padding: 16px;
   margin-top: 10px;
+
+  @media (max-width: 768px) {
+    position: fixed;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 32px);
+    max-width: 400px;
+  }
 `;
 
 interface SortByProps {
@@ -31,7 +39,7 @@ export const SortBy = ({
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>{children}</DropdownMenu.Trigger>
-      <StyledContent align="start">
+      <StyledContent align="center" side="bottom" sideOffset={5}>
         <Flex direction="column" gap="4">
           <Flex direction="column" gap="2">
             <Text size="2" mb="1" weight="bold">

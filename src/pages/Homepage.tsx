@@ -1,14 +1,20 @@
-import { Flex, Button } from "@radix-ui/themes";
+import { Flex, Button, Text } from "@radix-ui/themes";
 import { useDogSearch } from "../hooks/useDogSearch";
 import { useEffect, useState } from "react";
 import { DogCard } from "../components/DogCard";
 import { Dog } from "../types";
 import { Masonry } from "masonic";
 import styled from "styled-components";
-import { MixerHorizontalIcon, CaretSortIcon } from "@radix-ui/react-icons";
+import {
+  MixerHorizontalIcon,
+  CaretSortIcon,
+  DrawingPinFilledIcon,
+} from "@radix-ui/react-icons";
 import { FilterByBreed } from "../components/FilterByBreed";
 import { PaginationBar } from "../components/PaginationBar";
 import { SortBy } from "../components/SortBy";
+import { FilterByLocation } from "../components/FilterByLocation";
+import { Bounds } from "../types";
 
 const MasonryContainer = styled.div`
   width: 100%;
@@ -28,6 +34,15 @@ const FloatingButtonsContainer = styled.div<{ show: boolean }>`
   border-radius: 8px;
   opacity: ${(props) => (props.show ? 1 : 0)};
   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 8px;
+    top: 75px;
+  }
 `;
 
 // TODO: Add hover effect, and make it look better
@@ -36,7 +51,8 @@ const ActionButton = styled(Button)`
 `;
 
 const Homepage = () => {
-  const { searchDogs, fetchDogsByIds, fetchBreeds } = useDogSearch();
+  const { searchDogs, fetchDogsByIds, fetchBreeds, searchLocations } =
+    useDogSearch();
 
   const [dogIds, setDogIds] = useState<string[]>([]);
   const [dogs, setDogs] = useState<Dog[]>([]);
@@ -49,10 +65,14 @@ const Homepage = () => {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [sortBy, setSortBy] = useState<"breed" | "age" | "name">("breed");
 
-  const [prevCursor] = useState<string | null>(null);
-  const [nextCursor] = useState<string | null>(null);
+  const [prevCursor, setPrevCursor] = useState<string | null>(null);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [total, setTotal] = useState<number>(0);
 
   const [showControls, setShowControls] = useState(true);
+
+  const [locationBounds, setLocationBounds] = useState<Bounds | null>(null);
+  const [locationZipCodes, setLocationZipCodes] = useState<string[]>([]);
 
   const columnWidth = 300;
   const columnGutter = 24;
@@ -69,47 +89,66 @@ const Homepage = () => {
     });
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (cursor?: string) => {
     try {
       const searchParams: any = {
         sort: `${sortBy}:${sortDirection}`,
+        size: 25,
       };
 
       if (selectedBreeds.length > 0) {
         searchParams.breeds = selectedBreeds;
       }
 
-      const { resultIds } = await searchDogs(searchParams);
-      setDogIds(resultIds);
+      if (locationZipCodes && locationZipCodes.length > 0) {
+        searchParams.zipCodes = locationZipCodes;
+      }
+
+      const { resultIds, next, prev, total } = await searchDogs(searchParams);
+      setDogIds(resultIds || []); // Ensure we always set an array
+      setNextCursor(next || null);
+      setPrevCursor(prev || null);
+      setTotal(total || 0);
     } catch (error) {
       console.error("Error searching dogs:", error);
+      setDogIds([]);
+      setTotal(0);
+    }
+  };
+
+  const handlePagination = (direction: "previous" | "next") => {
+    if (direction === "next" && nextCursor) {
+      handleSearch(nextCursor);
+    } else if (direction === "previous" && prevCursor) {
+      handleSearch(prevCursor);
     }
   };
 
   useEffect(() => {
+    // Reset pagination when filters or sort changes
     handleSearch();
-  }, [selectedBreeds, sortBy, sortDirection]);
+  }, [selectedBreeds, sortBy, sortDirection, locationZipCodes]);
 
   useEffect(() => {
     const fetchDogs = async () => {
       try {
         if (dogIds.length > 0) {
           const fetchedDogs = await fetchDogsByIds(dogIds);
-          console.log("fetchedDogs", fetchedDogs);
-
-          const sortedDogs = [...fetchedDogs].sort((a, b) =>
-            sortDirection === "asc"
-              ? a.breed.localeCompare(b.breed)
-              : b.breed.localeCompare(a.breed)
+          // Ensure all dogs have valid data and unique IDs
+          const validDogs = fetchedDogs.filter(
+            (dog) => dog && dog.id && dog.name && dog.breed
           );
-          setDogs(sortedDogs);
+          setDogs(validDogs);
+        } else {
+          setDogs([]);
         }
       } catch (error) {
         console.error("Error fetching dogs:", error);
+        setDogs([]);
       }
     };
     fetchDogs();
-  }, [dogIds, sortDirection]);
+  }, [dogIds]);
 
   useEffect(() => {
     const getBreeds = async () => {
@@ -140,21 +179,38 @@ const Homepage = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handlePagination = (direction: "previous" | "next") => {
-    console.log(`Moving ${direction}`);
-    // TODO: Implement pagination
-  };
+  useEffect(() => {
+    const fetchLocationZipCodes = async () => {
+      if (!locationBounds) {
+        setLocationZipCodes([]); // Clear zip codes when bounds are null
+        return;
+      }
 
-  const renderCard = ({ data: dog }: { data: Dog }) => (
-    <Flex justify="center" align="center">
-      <DogCard
-        dog={dog}
-        onClick={() => console.log("Dog clicked!", dog.id)}
-        onFavorite={handleFavorite}
-        isFavorite={favorites.has(dog.id)}
-      />
-    </Flex>
-  );
+      try {
+        const zipCodes = await searchLocations({
+          geoBoundingBox: locationBounds,
+          size: 100,
+        });
+        setLocationZipCodes(zipCodes);
+      } catch (error) {
+        console.error("Error fetching location zip codes:", error);
+      }
+    };
+
+    fetchLocationZipCodes();
+  }, [locationBounds]);
+
+  const renderCard = ({ data: dog }: { data: Dog }) =>
+    dog && dog.id ? (
+      <Flex key={dog.id} justify="center" align="center">
+        <DogCard
+          dog={dog}
+          onClick={() => console.log("Dog clicked!", dog.id)}
+          onFavorite={handleFavorite}
+          isFavorite={favorites.has(dog.id)}
+        />
+      </Flex>
+    ) : null;
 
   return (
     <>
@@ -169,6 +225,12 @@ const Homepage = () => {
             Filter by Breed
           </ActionButton>
         </FilterByBreed>
+        <FilterByLocation onBoundsChanged={setLocationBounds}>
+          <ActionButton size="3" variant="solid" color="iris">
+            <DrawingPinFilledIcon width="16" height="16" />
+            Filter by Location
+          </ActionButton>
+        </FilterByLocation>
         <SortBy
           value={sortBy}
           onChange={setSortBy}
@@ -183,20 +245,40 @@ const Homepage = () => {
       </FloatingButtonsContainer>
       <Flex justify="center" align="start" py="5" mt="110px" mb="100px">
         <MasonryContainer>
-          <Masonry
-            items={dogs}
-            columnGutter={columnGutter}
-            columnWidth={columnWidth}
-            render={renderCard}
-          />
+          {dogs && dogs.length > 0 ? (
+            <Masonry
+              items={dogs}
+              columnGutter={columnGutter}
+              columnWidth={columnWidth}
+              render={renderCard}
+              key={dogs.map((d) => d.id).join(",")}
+            />
+          ) : (
+            <Flex
+              direction="column"
+              align="center"
+              justify="center"
+              py="9"
+              style={{ width: "100%" }}
+            >
+              <Text size="5" weight="medium" color="gray">
+                Sorry... couldn't find any dogs matching your search
+              </Text>
+              <Text size="3" color="gray" style={{ marginTop: "8px" }}>
+                Try adjusting your filters to see more results
+              </Text>
+            </Flex>
+          )}
         </MasonryContainer>
       </Flex>
-      <PaginationBar
-        onPrevious={() => handlePagination("previous")}
-        onNext={() => handlePagination("next")}
-        hasPrevious={!!prevCursor}
-        hasNext={!!nextCursor}
-      />
+      {dogs.length > 0 && (
+        <PaginationBar
+          onPrevious={() => handlePagination("previous")}
+          onNext={() => handlePagination("next")}
+          hasPrevious={!!prevCursor}
+          hasNext={!!nextCursor}
+        />
+      )}
     </>
   );
 };

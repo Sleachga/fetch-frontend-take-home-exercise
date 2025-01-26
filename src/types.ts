@@ -31,3 +31,18 @@ export interface Coordinates {
   lat: number;
   lon: number;
 }
+
+export interface LocationResult {
+  formatted_address: string;
+  geometry: {
+    location: {
+      lat: number;
+      lng: number;
+    };
+  };
+}
+
+export interface Bounds {
+  top_right: Coordinates;
+  bottom_left: Coordinates;
+}

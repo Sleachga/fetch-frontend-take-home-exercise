@@ -19,6 +19,8 @@ const PaginationContainer = styled(Flex)<{ show: boolean }>`
 
 const ActionButton = styled(Button)`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 120px;
+  justify-content: center;
 `;
 
 interface PaginationBarProps {
@@ -57,8 +59,10 @@ export const PaginationBar = ({
         onClick={onPrevious}
         disabled={!hasPrevious}
       >
-        <ChevronLeftIcon width="16" height="16" />
-        <Text ml="1">Previous</Text>
+        <Flex align="center" justify="center" gap="1">
+          <ChevronLeftIcon width="16" height="16" />
+          <Text>Previous</Text>
+        </Flex>
       </ActionButton>
       <ActionButton
         size="3"
@@ -67,8 +71,10 @@ export const PaginationBar = ({
         onClick={onNext}
         disabled={!hasNext}
       >
-        <Text mr="1">Next</Text>
-        <ChevronRightIcon width="16" height="16" />
+        <Flex align="center" justify="center" gap="1">
+          <Text>Next</Text>
+          <ChevronRightIcon width="16" height="16" />
+        </Flex>
       </ActionButton>
     </PaginationContainer>
   );
