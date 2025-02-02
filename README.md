@@ -1,50 +1,67 @@
-# React + TypeScript + Vite
+# Sanford's Strays 🐕
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A delightful web application for finding and favoriting adoptable dogs, built with React and TypeScript. Made with ❤️ for Fetch.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Dog Search**: Browse through a curated list of adoptable dogs
+- **Filtering**: Filter dogs by breed and location
+- **Sorting**: Sort dogs by age, breed, or name
+- **Favorites**: Save your favorite dogs for later
+- **Match Making**: Get matched with a dog based on your favorites
+- **Authentication**: Secure login system
+- **Responsive Design**: Works great on both desktop and mobile
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- React 18
+- TypeScript
+- Vite
+- Radix UI for components
+- Styled Components for styling
+- React Router for navigation
+- React Confetti for celebrations
+- Masonic for responsive grid layouts
 
-- Configure the top-level `parserOptions` property like this:
+## Getting Started
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+1. Clone the repository
+
+```bash
+git clone https://github.com/yourusername/sanfords-strays.git
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+2. Install dependencies
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm install
 ```
+
+3. Start the development server
+
+```bash
+npm run dev
+```
+
+4. Visit `http://localhost:5173` in your browser
+
+## Project Structure
+
+```
+src/
+├── components/    # Reusable UI components
+├── hooks/         # Custom React hooks
+├── pages/         # Page components
+├── types/         # TypeScript type definitions
+├── assets/        # Static assets
+└── App.tsx        # Root component
+```
+
+## API Integration
+
+The app integrates with the Fetch API for:
+
+- Dog search and filtering
+- Location-based searches
+- Dog matching algorithm
+- Authentication
