@@ -46,3 +46,7 @@ export interface Bounds {
   top_right: Coordinates;
   bottom_left: Coordinates;
 }
+
+export interface Match {
+  match: string;
+}

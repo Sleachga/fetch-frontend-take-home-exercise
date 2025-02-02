@@ -43,7 +43,7 @@ const FloatingButtonsContainer = styled.div<{ show: boolean }>`
   @media (max-width: 768px) {
     flex-direction: column;
     gap: 8px;
-    top: 75px;
+    top: 50px;
   }
 `;
 
@@ -59,7 +59,10 @@ const Homepage = () => {
   const [dogIds, setDogIds] = useState<string[]>([]);
   const [dogs, setDogs] = useState<Dog[]>([]);
 
-  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [favorites, setFavorites] = useState<Set<string>>(() => {
+    const saved = localStorage.getItem("favorited_dogs");
+    return saved ? new Set(JSON.parse(saved)) : new Set();
+  });
 
   const [breeds, setBreeds] = useState<string[]>([]);
   const [selectedBreeds, setSelectedBreeds] = useState<string[]>([]);
@@ -76,6 +79,9 @@ const Homepage = () => {
   const [locationBounds, setLocationBounds] = useState<Bounds | null>(null);
   const [locationZipCodes, setLocationZipCodes] = useState<string[]>([]);
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [showLoading, setShowLoading] = useState(false);
+
   const columnWidth = 300;
   const columnGutter = 24;
 
@@ -87,12 +93,17 @@ const Homepage = () => {
       } else {
         newFavorites.add(dogId);
       }
+      // Save to localStorage
+      localStorage.setItem("favorited_dogs", JSON.stringify([...newFavorites]));
       return newFavorites;
     });
   };
 
   const handleSearch = async (cursor?: string) => {
     try {
+      setIsLoading(true);
+      setShowLoading(true);
+
       const searchParams: any = {
         sort: `${sortBy}:${sortDirection}`,
         size: 25,
@@ -131,18 +142,25 @@ const Homepage = () => {
       setNextCursor(next || null);
       setPrevCursor(prev || null);
       setTotal(totalResults || 0);
+
+      setShowLoading(false);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error searching dogs:", error);
       setDogIds([]);
       setTotal(0);
+      setShowLoading(false);
+      setIsLoading(false);
     }
   };
 
   const handlePagination = (direction: "previous" | "next") => {
     if (direction === "next" && nextCursor) {
       handleSearch(nextCursor);
+      window.scrollTo({ top: 0, behavior: "instant" });
     } else if (direction === "previous" && prevCursor) {
       handleSearch(prevCursor);
+      window.scrollTo({ top: 0, behavior: "instant" });
     }
   };
 
@@ -228,7 +246,7 @@ const Homepage = () => {
         <DogCard
           dog={dog}
           onClick={() => console.log("Dog clicked!", dog.id)}
-          onFavorite={handleFavorite}
+          onFavoriteClick={handleFavorite}
           isFavorite={favorites.has(dog.id)}
         />
       </Flex>
@@ -267,7 +285,17 @@ const Homepage = () => {
       </FloatingButtonsContainer>
       <Flex justify="center" align="start" py="5" mt="110px" mb="100px">
         <MasonryContainer>
-          {dogs && dogs.length > 0 ? (
+          {showLoading ? (
+            <Flex
+              justify="center"
+              align="center"
+              style={{ width: "100%", minHeight: "300px" }}
+            >
+              <Text size="3" color="gray">
+                Loading dogs...
+              </Text>
+            </Flex>
+          ) : dogs && dogs.length > 0 ? (
             <Masonry
               items={dogs}
               columnGutter={columnGutter}

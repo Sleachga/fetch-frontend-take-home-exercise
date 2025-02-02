@@ -52,7 +52,7 @@ const FavoriteButton = styled(IconButton)`
 interface DogCardProps {
   dog: Dog;
   onClick?: () => void;
-  onFavorite?: (dogId: string) => void;
+  onFavoriteClick?: (dogId: string) => void;
   isFavorite?: boolean;
 }
 
@@ -64,13 +64,25 @@ const StyledHeading = styled(Heading)`
 export const DogCard = ({
   dog,
   onClick,
-  onFavorite,
+  onFavoriteClick,
   isFavorite = false,
 }: DogCardProps) => {
   const displayAge = dog.age === 0 ? "Less than 1" : dog.age;
 
-  const handleFavoriteClick = () => {
-    onFavorite?.(dog.id);
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click when clicking favorite button
+    if (onFavoriteClick) {
+      const favorites = new Set(
+        JSON.parse(localStorage.getItem("favorited_dogs") || "[]")
+      );
+      if (favorites.has(dog.id)) {
+        favorites.delete(dog.id);
+      } else {
+        favorites.add(dog.id);
+      }
+      localStorage.setItem("favorited_dogs", JSON.stringify([...favorites]));
+      onFavoriteClick(dog.id);
+    }
   };
 
   return (

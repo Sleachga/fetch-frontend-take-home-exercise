@@ -1,4 +1,4 @@
-import { Dog } from "../types";
+import { Dog, Match } from "../types";
 
 interface DogSearchParams {
   breeds?: string[];
@@ -140,10 +140,33 @@ export const useDogSearch = () => {
     }
   };
 
+  const fetchDogMatch = async (dogIds: string[]): Promise<Match> => {
+    try {
+      const response = await fetch(`${BASE_URL}/dogs/match`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(dogIds),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch dog match");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching dog match:", error);
+      throw error;
+    }
+  };
+
   return {
     searchDogs,
     fetchDogsByIds,
     fetchBreeds,
     searchLocations,
+    fetchDogMatch,
   };
 };
