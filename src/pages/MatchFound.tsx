@@ -71,6 +71,13 @@ const MatchFound = () => {
 
   const { width, height } = useWindowSize();
 
+  const resetAndFetchNewMatch = async () => {
+    setMatchFound(false);
+    setDogMatch(null);
+    setShowConfetti(false);
+    await fetchMatchId();
+  };
+
   return (
     <Flex direction="column" gap="6" align="center" pt="9">
       <StyledHeading size="8" weight="bold">
@@ -96,19 +103,12 @@ const MatchFound = () => {
           </Text>
           <DogCard dog={dogMatch} isFavorite={true} />
           <Flex gap="4">
-            <Button
-              size="4"
-              variant="solid"
-              onClick={() => window.location.reload()}
-            >
+            <Button size="4" variant="solid" onClick={resetAndFetchNewMatch}>
               Find Another Match
             </Button>
           </Flex>
         </>
       )}
-
-      {/* <DogCard dog={mockDog} isFavorite={true} /> */}
-
       <StyledLink to="/match">← Back to Favorites</StyledLink>
     </Flex>
   );

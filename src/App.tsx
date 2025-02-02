@@ -7,7 +7,6 @@ import { gray, blue, red, green } from "@radix-ui/colors";
 import { ThemeProvider } from "styled-components";
 import NavigationBar from "./components/NavigationBar";
 
-// Create your theme
 const theme = {
   colors: {
     ...gray,
