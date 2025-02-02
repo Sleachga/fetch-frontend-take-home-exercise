@@ -79,7 +79,7 @@ const Homepage = () => {
   const [locationBounds, setLocationBounds] = useState<Bounds | null>(null);
   const [locationZipCodes, setLocationZipCodes] = useState<string[]>([]);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
   const [showLoading, setShowLoading] = useState(false);
 
   const columnWidth = 300;
