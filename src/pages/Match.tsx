@@ -50,20 +50,24 @@ const Match = () => {
       <Heading size="8" weight="bold">
         Find Your Perfect Match
       </Heading>
-      <Text size="4" style={{ lineHeight: 1.6 }}>
-        Here are your favorited dogs...
-      </Text>
 
-      <Flex justify="center">
-        <Button
-          size="4"
-          color="iris"
-          variant="solid"
-          onClick={() => navigate("/match-found")}
-        >
-          Let's find a match!
-        </Button>
-      </Flex>
+      {favoriteDogs.length > 0 && (
+        <>
+          <Text size="4" style={{ lineHeight: 1.6 }}>
+            Here are your favorited dogs...
+          </Text>
+          <Flex justify="center">
+            <Button
+              size="4"
+              color="iris"
+              variant="solid"
+              onClick={() => navigate("/match-found")}
+            >
+              Let's find a match!
+            </Button>
+          </Flex>
+        </>
+      )}
 
       {favoriteDogs.length > 0 ? (
         <Flex

@@ -21,7 +21,6 @@ createRoot(document.getElementById("root")!).render(
           </Routes>
           <App />
         </AuthProvider>
-        8
       </BrowserRouter>
     </Theme>
   </StrictMode>
